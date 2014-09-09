@@ -1,0 +1,6 @@
+*.dblite
+*.pyc
+*.idb
+*.pdb
+build
+bin
