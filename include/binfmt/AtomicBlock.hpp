@@ -31,8 +31,9 @@ class AtomicBlock {
 // the buffer back to the original state if the whole atomic block can't be
 // serialized or deserialized in the given buffer space.
 public:
-    enum Mode { READ, WRITE };
+    enum Mode { READ, WRITE, COMMIT };
     AtomicBlock(Buffer* buffer, Mode mode);
+    ~AtomicBlock();
 
     bool commit();
 

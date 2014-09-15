@@ -20,8 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once 
-
 #include "binfmt/Common.hpp"
 #include "binfmt/AtomicBlock.hpp"
 
@@ -33,6 +31,15 @@ AtomicBlock::AtomicBlock(Buffer* buffer, Mode mode) : buffer_(buffer), mode_(mod
     position_ = buffer_->position();
 }
 
+AtomicBlock::~AtomicBlock() {
+    if (COMMIT == mode_) {
+        buffer_->positionIs(position_);
+        buffer_->limitIs(limit_);
+    } else {
+        // Abort if not committed:
+    }
+}
+
 bool AtomicBlock::commit() {
     switch (mode_) {
     case READ:
@@ -41,13 +48,17 @@ bool AtomicBlock::commit() {
     case WRITE:
         assert(buffer_->position()==position_); // FIXME: Add a better check for reads
         break;
+    case COMMIT:
+        assert(!"already committed");
+        break;
     default:
         assert(!"unknown mode");
         break;
     }
+    mode_ = COMMIT;
     if (buffer_->errors() != errors_) {
-        buffer_->positionIs(buffer_->position()); 
-        buffer_->limitIs(buffer_->limit()); 
+        buffer_->positionIs(position_);
+        buffer_->limitIs(limit_);
         return false;
     } else {
         return true;

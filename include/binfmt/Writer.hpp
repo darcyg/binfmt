@@ -20,13 +20,23 @@
  * IN THE SOFTWARE.
  */
 
+#pragma once
 
-#ifndef BINFMT_COMMON_HPP
-#define BINFMT_COMMON_HPP
+#include "binfmt/Buffer.hpp"
 
-#include <string>
-#include <cassert>
-#include <type_traits>
+namespace binfmt {
 
-#endif
+class Writer {
+public:
+    Writer(Buffer* buffer) : buffer_(buffer) {}
 
+    template <typename T> Buffer::ErrorCode io(T const& t) {
+        return buffer_->write(t);
+    }
+
+private:
+    Buffer* buffer_;
+
+};
+
+}

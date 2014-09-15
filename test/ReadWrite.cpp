@@ -20,14 +20,23 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include "binfmt\Common.hpp"
-#include "binfmt\binfmt.hpp"
+#include "binfmt/Common.hpp"
+#include "binfmt/binfmt.hpp"
 #include <cstdint>
 #include <iostream>
 
-int main() {
+struct Msg {
+    std::string name;
+    int number;
+};
+
+template <typename T>
+void iomsg(Msg& msg, T fmt) {
+    assert(binfmt::Buffer::OK==fmt.io(msg.name));
+    assert(binfmt::Buffer::OK==fmt.io(msg.number));
+}
+
+void testReadWrite() {
     binfmt::Buffer buffer(16);
 
     assert(binfmt::Buffer::OK==buffer.write(std::string("hello world")));
@@ -57,6 +66,27 @@ int main() {
     assert(!atomic.commit());
     assert(buffer.limit()==0);
     assert(buffer.position()==0);
+
+}
+
+void testBidirectional() {
+    binfmt::Buffer buffer(1024);
+
+    Msg out = { "foo", 1234 };
+    binfmt::Writer writer(&buffer);
+    iomsg(out, writer);
+
+    Msg in;
+    binfmt::Reader reader(&buffer);
+    iomsg(in, reader);
+
+    assert(in.name==out.name);
+    assert(in.number==out.number);
+}
+
+int main() {
+    testReadWrite();
+    testBidirectional();
 
     return 0;
 }

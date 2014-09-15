@@ -20,13 +20,23 @@
  * IN THE SOFTWARE.
  */
 
+#pragma once
 
-#ifndef BINFMT_COMMON_HPP
-#define BINFMT_COMMON_HPP
+#include "binfmt/Buffer.hpp"
 
-#include <string>
-#include <cassert>
-#include <type_traits>
+namespace binfmt {
 
-#endif
+class Reader {
+public:
+    Reader(Buffer* buffer) : buffer_(buffer) {}
 
+    template <typename T> Buffer::ErrorCode io(T& t) {
+        return buffer_->read(t);
+    }
+
+private:
+    Buffer* buffer_;
+
+};
+
+}

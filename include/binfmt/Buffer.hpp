@@ -67,8 +67,20 @@ public:
         return write((char const*)&value, sizeof(value));
     }
 
+    template <typename T> 
+    typename std::enable_if<std::is_integral<T>::value, ErrorCode>::type
+    read(T& value) {
+        return read((char*)&value, sizeof(value));
+    }
+
+    template <typename T>
+    typename std::enable_if<std::is_floating_point<T>::value, ErrorCode>::type
+    read(T& value) {
+        return read((char*)&value, sizeof(value));
+    }
+
     ErrorCode write(std::string const& value) {
-        size_t const len = value.size();
+        uint32_t const len = uint32_t(value.size());
         ErrorCode err;
 
         err = write((char const*)&len, sizeof(len));
@@ -86,21 +98,9 @@ public:
         return write((char const*)&value, 1);
     }
 
-    template <typename T> 
-    typename std::enable_if<std::is_integral<T>::value, ErrorCode>::type
-    read(T& value) {
-        return read((char*)&value, sizeof(value));
-    }
-
-    template <typename T>
-    typename std::enable_if<std::is_floating_point<T>::value, ErrorCode>::type
-    read(T& value) {
-        return read((char*)&value, sizeof(value));
-    }
-
     ErrorCode
     read(std::string& value) {
-        size_t len = 0;
+        uint32_t len = 0;
         ErrorCode err;
 
         err = read((char*)&len, sizeof(len));

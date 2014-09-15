@@ -24,3 +24,5 @@
 
 #include "binfmt/AtomicBlock.hpp"
 #include "binfmt/Buffer.hpp"
+#include "binfmt/Reader.hpp"
+#include "binfmt/Writer.hpp"
