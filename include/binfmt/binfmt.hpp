@@ -22,4 +22,5 @@
 
 #pragma once
 
+#include "binfmt/AtomicBlock.hpp"
 #include "binfmt/Buffer.hpp"

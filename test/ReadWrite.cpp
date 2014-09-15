@@ -32,12 +32,31 @@ int main() {
 
     assert(binfmt::Buffer::OK==buffer.write(std::string("hello world")));
     assert(15==buffer.limit());
+    assert(binfmt::Buffer::OK==buffer.write(true));
     assert(binfmt::Buffer::OVERFLOW==buffer.write(1));
 
     std::string msg;
-    int32_t id;
+    int32_t id = 0;
+    bool boolean;
     assert(binfmt::Buffer::OK==buffer.read(msg));
+    assert(binfmt::Buffer::OK==buffer.read(boolean));
     assert(binfmt::Buffer::UNDERFLOW==buffer.read(id));
+
+    assert(id==0);
+    assert(msg=="hello world");
+    assert(boolean==true);
+
+    buffer.limitIs(0);
+    buffer.positionIs(0);
+
+    binfmt::AtomicBlock atomic(&buffer, binfmt::AtomicBlock::WRITE);
+
+    buffer.write(true);
+    buffer.write(std::string("helllllllllllllllllllo world")); 
+
+    assert(!atomic.commit());
+    assert(buffer.limit()==0);
+    assert(buffer.position()==0);
 
     return 0;
 }

@@ -55,6 +55,7 @@ void Buffer::positionInc(size_t value) {
 
 Buffer::ErrorCode Buffer::write(char const* buf, size_t len) {
     if (limit_+len > capacity_) {
+        errors_++;
         return OVERFLOW;
     }
     memcpy(buffer_+limit_, buf, len);
@@ -64,6 +65,7 @@ Buffer::ErrorCode Buffer::write(char const* buf, size_t len) {
 
 Buffer::ErrorCode Buffer::read(char* buf, size_t len) {
     if (position_+len > limit_) {
+        errors_++;
         return UNDERFLOW;
     }
     memcpy(buf, buffer_+position_, len);

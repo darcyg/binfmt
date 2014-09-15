@@ -39,6 +39,7 @@ public:
     size_t capacity() const { return capacity_; }
     size_t limit() const { return limit_; }
     size_t position() const { return position_; }
+    size_t errors() const { return errors_; }
     char const* buffer() const { return buffer_; }
     
     void limitIs(size_t limit);
@@ -48,6 +49,10 @@ public:
 
     ErrorCode write(char const* buf, size_t len);
     ErrorCode read(char* buf, size_t len);
+
+    // These overloads are not allowed
+    ErrorCode write(char* msg) = delete;
+    ErrorCode read(char* msg) = delete;
 
     template <typename T> 
     typename std::enable_if<std::is_integral<T>::value, ErrorCode>::type
@@ -62,8 +67,7 @@ public:
         return write((char const*)&value, sizeof(value));
     }
 
-    ErrorCode
-    write(std::string const& value) {
+    ErrorCode write(std::string const& value) {
         size_t const len = value.size();
         ErrorCode err;
 
@@ -76,6 +80,10 @@ public:
             return err;
         }
         return OK;
+    }
+
+    ErrorCode write(bool value) {
+        return write((char const*)&value, 1);
     }
 
     template <typename T> 
@@ -106,12 +114,18 @@ public:
         }
         return OK;
     } 
+
+    ErrorCode write(bool& value) {
+        value = 0;
+        return read((char*)&value, 1);
+    }
     
 private:
-    char* buffer_;
+    char* buffer_ = 0;
     size_t capacity_;
     size_t limit_;
     size_t position_;
+    size_t errors_ = 0;
 };
 
 }
