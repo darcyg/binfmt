@@ -20,9 +20,12 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
+#ifndef BINFMT_COMMON_HPP
+#define BINFMT_COMMON_HPP
 
 #include <string>
 #include <cassert>
 #include <type_traits>
 
+
+#endif

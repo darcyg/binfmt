@@ -20,10 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once
-
-#include "binfmt\Common.hpp"
-#include "binfmt\binfmt.hpp"
+#include "binfmt/Common.hpp"
+#include "binfmt/binfmt.hpp"
 #include <cstdint>
 #include <iostream>
 

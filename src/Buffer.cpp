@@ -20,8 +20,8 @@
  * IN THE SOFTWARE.
  */
 
-#include "binfmt\Common.hpp"
-#include "binfmt\Buffer.hpp"
+#include "binfmt/Common.hpp"
+#include "binfmt/Buffer.hpp"
 #include <iostream>
 
 using namespace binfmt;

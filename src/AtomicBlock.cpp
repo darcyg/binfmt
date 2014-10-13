@@ -20,8 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-#pragma once 
-
 #include "binfmt/Common.hpp"
 #include "binfmt/AtomicBlock.hpp"
 
