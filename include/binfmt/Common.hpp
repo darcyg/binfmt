@@ -20,7 +20,6 @@
  * IN THE SOFTWARE.
  */
 
-
 #ifndef BINFMT_COMMON_HPP
 #define BINFMT_COMMON_HPP
 
